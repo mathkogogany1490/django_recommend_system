@@ -1,0 +1,26 @@
+<nav class="navbar">
+   <div class="navbar-container">
+       <a href="{% url 'main' %}" class="navbar-brand">KOGOANGE</a>
+       <a href="{% url 'recommend:movie' %}">recommend movie</a>
+       <a href="{% url 'chatbot:window' %}">chatbot</a>
+       <a href="">another</a>
+       <div class="navbar-links">
+           {% if user.is_authenticated %}
+               <div class="navbar-user-info">
+                   <!-- 프로필 이미지 표시 -->
+                   {% if user.profile_image %}
+                       <img src="{{ user.profile_image.url }}" alt="{{ user.username }}'s profile image" class="navbar-profile-image">
+                   {% else %}
+                        <!-- 프로필 이미지가 없을 경우 기본 이미지 표시 -->
+                       <img src="/static/account/images/default_profile.png" alt="Default profile image" class="navbar-profile-image">
+                   {% endif %}
+                   <span class="navbar-user">Hello, {{ user.username }}!</span>
+               </div>
+               <a href="{% url 'account:logout' %}" class="navbar-link">Logout</a>
+           {% else %}
+               <a href="{% url 'account:login' %}" class="navbar-link">Login</a>
+               <a href="{% url 'account:signup' %}" class="navbar-link">Sign Up</a>
+           {% endif %}
+       </div>
+   </div>
+</nav>

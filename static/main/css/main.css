@@ -1,0 +1,144 @@
+/* Global Styles */
+* {
+    box-sizing: border-box;
+    padding: 0;
+    margin: 0;
+}
+
+body {
+    font-family: 'Roboto', sans-serif;
+    background-color: #f0f4f8; /* Subtle light gray background for a clean, tech-focused aesthetic */
+    color: #333; /* Default text color: dark gray for contrast */
+}
+
+/* Container Styles */
+.container {
+    width: 1275px;
+    margin: 100px auto;
+    overflow: hidden;
+    background-color: #fff;
+    border-radius: 12px;
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+    position: relative;
+}
+
+/* Header Styles */
+.head {
+    margin: 10px auto;
+    margin-top: 50px;
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.title {
+    font-weight: bold;
+    font-size: 2rem;
+    color: #3a67d7; /* Cool, AI-inspired blue for emphasis */
+}
+
+/* Arrow Container */
+.direction {
+    width: 60px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+/* Arrow Styles */
+.arrow {
+    font-size: 48px; /* 화살표 크기 */
+    color: #333; /* 화살표 색상 */
+    cursor: pointer; /* 커서 모양을 손가락으로 변경 */
+    user-select: none; /* 화살표 텍스트 선택 불가 */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 60px; /* 화살표가 들어갈 박스의 너비 */
+    height: 60px; /* 화살표가 들어갈 박스의 높이 */
+    border-radius: 50%; /* 둥근 화살표 버튼 */
+    background-color: #f0f0f0; /* 화살표 버튼 배경색 */
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1); /* 약간의 그림자 추가 */
+    transition: background-color 0.3s ease, color 0.3s ease, transform 0.3s; /* 배경과 색상 전환 및 크기 애니메이션 */
+}
+
+.arrow:hover {
+    background-color: #333; /* 마우스 오버 시 배경색 변경 */
+    color: #fff; /* 마우스 오버 시 화살표 색상 변경 */
+    transform: scale(1.2); /* Enlarges arrows slightly on hover for an interactive feel */
+}
+
+/* Road List (Slider) Styles */
+.road-list {
+    display: flex;
+    flex-direction: row;
+    transition: transform 1s ease;
+    padding: 5px 0px;
+    justify-content: flex-start; /* Align cards to the left */
+}
+
+/* Card Styles */
+.card {
+    width: 260px;
+    margin-left: 15px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    transition: all 0.3s ease-in-out;
+    flex-shrink: 0;
+    border-radius: 12px;
+    background-color: #ffffff; /* Clean, sharp white background for the card */
+    overflow: hidden;
+}
+
+.card img {
+    width: 100%;
+    border-radius: 12px 12px 0 0;
+}
+
+.card:hover {
+    transform: translateY(-5px); /* Subtle hover effect on the card */
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.2);
+}
+
+.card-content {
+    padding: 15px;
+    margin: 0px auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+}
+
+.card-type, .card-title {
+    font-size: 1rem;
+    color: #3a67d7; /* Consistent blue for card text */
+}
+
+.card-part {
+    margin-top: 10px;
+    padding: 0.3rem 1rem;
+    background-color: #f39c12; /* Accent color for contrast */
+    color: #fff;
+    border-radius: 20px;
+}
+
+/* Button Styles */
+.btn {
+    display: inline-block;
+    background-color: #3a67d7;
+    color: #fff;
+    padding: 12px 24px;
+    text-decoration: none;
+    border-radius: 8px;
+    font-weight: bold;
+    position: absolute;
+    top: 25%;
+    right: 50%;
+    transform: translateX(50%);
+    transition: background-color 0.3s ease;
+}
+
+.btn:hover {
+    background-color: #2a50a0; /* Darker shade of blue for hover */
+}

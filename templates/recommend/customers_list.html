@@ -1,0 +1,11 @@
+{% for customer in customers %}
+    <div class="customer-item">
+        <h2>{{ customer.title }}</h2>
+        <p>Genre: {{ customer.genres }}</p>
+        {% if customer.movie_image %}
+            <img src="{{ customer.movie_image.url }}" alt="{{ customer.title }}">
+        {% else %}
+            <img src="/static/images/default_profile.png" alt="{{ customer.title }} thumbnail">
+        {% endif %}
+    </div>
+{% endfor %}

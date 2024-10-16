@@ -1,0 +1,83 @@
+
+/* Navbar Styling */
+.navbar {
+   position: fixed; /* Fixed at the top of the page */
+   top: 0;
+   width: 100%;
+   background-color: #C0C0C0; /* Silver background color */
+   color: #F8F8F8; /* Light silver/grayish text color */
+   padding: 10px 20px; /* Padding around the content */
+   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); /* Subtle shadow for depth */
+   z-index: 1000; /* Ensure it stays on top */
+   font-size: 1rem; /* Font size for the text */
+   font-weight: 600; /* Font weight for bold text */
+   font-family: Arial, sans-serif; /* Ensure consistent font across pages */
+}
+
+
+.navbar-container {
+   display: flex; /* Flexbox for layout */
+   justify-content: space-around; /* Space between brand and links */
+   align-items: center; /* Vertically center items */
+   max-width: 1200px; /* Max width of the navbar content */
+   margin: 0 auto; /* Center the navbar content horizontally */
+}
+.navbar-brand {
+   font-size: 1.5em; /* Slightly larger font for the brand */
+   color: white;
+   text-decoration: none; /* No underline */
+}
+
+.navbar-links {
+   display: flex;
+   gap: 15px; /* Space between each link */
+}
+
+.navbar-link {
+   color: white; /* Link color */
+   text-decoration: none; /* No underline */
+   padding: 5px 10px; /* Padding for clickable area */
+   border-radius: 5px; /* Rounded corners */
+   transition: background-color 0.3s ease; /* Smooth hover transition */
+}
+
+.navbar-link:hover {
+   background-color: #003366; /* Darker background on hover */
+}
+.navbar-profile-image {
+   width: 40px;
+   height: 40px;
+   border-radius: 50%;
+   object-fit: cover;
+}
+
+.navbar-user-info {
+    display: flex;
+    align-items: center;   /* 수직 가운데 정렬 */
+    justify-content: center; /* 수평 가운데 정렬 */
+    gap: 10px; /* 이미지와 텍스트 사이의 간격 */
+}
+
+.navbar-profile-image {
+    width: 40px; /* 원하는 크기로 조정 */
+    height: 40px;
+    border-radius: 50%; /* 이미지를 원형으로 만듦 */
+}
+
+.navbar-user {
+    font-size: 16px; /* 텍스트 크기 */
+    vertical-align: middle; /* 필요에 따라 텍스트의 정렬 수정 */
+}
+
+.navbar-user, .navbar-link {
+    font-size: 16px; /* 텍스트 크기 */
+    vertical-align: middle; /* 텍스트를 수직 가운데 정렬 */
+}
+
+.navbar-link {
+    padding-top: 10px;
+    font-size: 16px; /* 텍스트 크기 */
+    vertical-align: middle; /* 텍스트를 수직 가운데 정렬 */
+}
+
+

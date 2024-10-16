@@ -1,0 +1,11 @@
+{% for movie in movies %}
+    <div class="movie-item">
+        <h2>{{ movie.title }}</h2>
+        <p>Genre: {{ movie.genres }}</p>
+        {% if movie.movie_image %}
+            <img src="{{ movie.movie_image.url }}" alt="{{ movie.title }} thumbnail">
+        {% else %}
+            <img src="/static/images/default_profile.png" alt="{{ movie.title }} thumbnail">
+        {% endif %}
+    </div>
+{% endfor %}
