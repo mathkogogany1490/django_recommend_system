@@ -5,17 +5,30 @@ from sqlalchemy.exc import SQLAlchemyError
 
 def connect_field():
     fields = {
-        "host": "54.180.124.168",
+        "host": "3.36.78.179",
         "username": "kogo1490",
         "password": "math1106",
         "database": "mydb",
         "port": 3306
     }
     return fields
+def postgres_connect_field():
+    fields = {
+        "host": "localhost",
+        "username": "postgres",
+        "password": "math1106",
+        "database": "postgres",
+        "port": 5432
+    }
+    return fields
 
-def bring_dataframe_from_table(table):
-    fields = connect_field()
-    conn = f"mysql+mysqlconnector://{fields['username']}:{fields['password']}@{fields['host']}:{fields['port']}/{fields['database']}"
+def bring_dataframe_from_table(table, flag):
+    if flag == "postgres":
+        fields = postgres_connect_field()
+        conn = f"postgresql+psycopg2://{fields['username']}:{fields['password']}@{fields['host']}:{fields['port']}/{fields['database']}"
+    elif flag == "mysql":
+        fields = connect_field()
+        conn = f"mysql+mysqlconnector://{fields['username']}:{fields['password']}@{fields['host']}:{fields['port']}/{fields['database']}"
     try:
         engine = create_engine(conn)
         query = f"select * from {table}"

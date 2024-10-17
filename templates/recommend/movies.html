@@ -30,6 +30,7 @@
 
         <a href="javascript:void(0);" onclick="loadCustomers()" class="button-style">SVD Model</a>
         <a href="javascript:void(0);" onclick="loadCustomersNMF()" class="button-style">NMF Model</a>
+        <a href="javascript:void(0);" onclick="loadCustomersMF()" class="button-style">MF Model</a>
 
 
         <!-- Section 2: Customer Recommendations -->
@@ -79,6 +80,19 @@
         function loadCustomersNMF() {
             $.ajax({
                 url: "{% url 'recommend:load_customers' model='nmf_model' %}", // Django 뷰로 AJAX 요청
+                method: "GET",
+                success: function(data) {
+                    $('#customer-list').html(data.customers_html); // AJAX로 가져온 HTML을 삽입
+                },
+                error: function(error) {
+                    $('#customer-list').html("<p>Error loading recommendations</p>");
+                }
+            });
+        }
+        // AJAX로 고객 추천 목록 가져오기
+        function loadCustomersMF() {
+            $.ajax({
+                url: "{% url 'recommend:load_customers' model='mf_model' %}", // Django 뷰로 AJAX 요청
                 method: "GET",
                 success: function(data) {
                     $('#customer-list').html(data.customers_html); // AJAX로 가져온 HTML을 삽입

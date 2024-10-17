@@ -5,3 +5,4 @@ from recommend.models import Movies
 @admin.register(Movies)
 class MoviesAdmin(admin.ModelAdmin):
     list_display = ('movie_id', 'title', 'genres', 'movie_image')
+    search_fields = ['movie_id']
