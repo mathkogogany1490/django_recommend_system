@@ -26,6 +26,7 @@ urlpatterns = [
     path('account/', include('account.urls')),
     path('chatbot/', include('chatbot.urls')),
     path('recommend/', include('recommend.urls')),
+    path('pca/', include('pca.urls')),
 ]
 
 # 미디어 파일 URL 패턴 추가
