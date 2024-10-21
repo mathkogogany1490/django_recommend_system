@@ -1,0 +1,99 @@
+<!-- chart/templates/genre_distribution_view.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Genre Distribution</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels"></script>
+     {% load static %}
+    <link rel="stylesheet" href="{% static 'main/css/navbar.css' %}">
+    <link rel="stylesheet" href="{% static 'chart/css/genre_distribution_view.css' %}">
+</head>
+<body>
+     {% include 'navbar.html' %}
+
+    <h2>Genre Distribution (Async)</h2>
+      <div class="chart-container">
+        <canvas id="genreChart"></canvas>
+    </div>
+
+
+    <script>
+         // 장르 데이터를 비동기로 가져오기 위한 함수
+        async function fetchGenreData() {
+            const response = await fetch('{% url "chart:pop_chart" %}');  // Django 서버의 해당 엔드포인트로 요청
+            const genreData = await response.json();
+            return genreData;
+        }
+
+        // 차트를 그리는 함수
+        function drawChart(genreData) {
+            const ctx = document.getElementById('genreChart').getContext('2d');
+            const genreChart = new Chart(ctx, {
+                type: 'pie',
+                data: {
+                    labels: Object.keys(genreData),  // 장르 이름
+                    datasets: [{
+                        label: 'Genre Distribution',
+                        data: Object.values(genreData),  // 장르별 개수
+                        backgroundColor: [
+                            'rgba(255, 99, 132, 0.2)',
+                            'rgba(54, 162, 235, 0.2)',
+                            'rgba(255, 206, 86, 0.2)',
+                            'rgba(75, 192, 192, 0.2)',
+                            'rgba(153, 102, 255, 0.2)',
+                            'rgba(255, 159, 64, 0.2)',
+                            'rgba(255, 99, 71, 0.2)',
+                            'rgba(46, 139, 87, 0.2)',
+                            'rgba(70, 130, 180, 0.2)',
+                            'rgba(238, 130, 238, 0.2)'
+                        ],
+                        borderColor: [
+                            'rgba(255, 99, 132, 1)',
+                            'rgba(54, 162, 235, 1)',
+                            'rgba(255, 206, 86, 1)',
+                            'rgba(75, 192, 192, 1)',
+                            'rgba(153, 102, 255, 1)',
+                            'rgba(255, 159, 64, 1)',
+                            'rgba(255, 99, 71, 1)',
+                            'rgba(46, 139, 87, 1)',
+                            'rgba(70, 130, 180, 1)',
+                            'rgba(238, 130, 238, 1)'
+                        ],
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    plugins: {
+                        legend: {
+                            position: 'top',
+                        },
+                        datalabels: {
+                            color: '#000',  // 데이터 레이블 색상
+                            formatter: (value, context) => {
+                                return context.chart.data.labels[context.dataIndex];  // 장르 이름 반환
+                            },
+                            font: {
+                                size: 14,  // 글자 크기 설정
+                                weight: 'bold',
+                            },
+                            textAlign: 'center'
+                        }
+                    }
+                },
+                plugins: [ChartDataLabels]  // datalabels 플러그인 활성화
+            });
+        }
+
+        // 페이지 로딩 시 비동기로 데이터를 가져와서 차트를 그리기
+        document.addEventListener('DOMContentLoaded', async () => {
+            const genreData = await fetchGenreData();
+            drawChart(genreData);
+        });
+    </script>
+</body>
+</html>
+

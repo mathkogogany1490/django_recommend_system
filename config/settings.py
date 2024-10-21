@@ -33,7 +33,7 @@ SECRET_KEY = 'django-insecure-_ptl(ga$ia7%@*9oxn+@v6$%!6($8ln!w(n$t4_z*5z!l^rj2l
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ["*"]
 
 
 # Application definition
@@ -42,7 +42,7 @@ INSTALLED_APPS = [
     "account",
     "chatbot",
     "recommend",
-    "pca",
+    "chart",
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -138,6 +138,8 @@ STATIC_URL = 'static/'
 STATICFILES_DIRS = [
     os.path.join(BASE_DIR, "static")
 ]
+# STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles') # collectstati 시 사용하는 경로
+
 MEDIA_URL = '/media/'  # 업로드 파일에 접근할 수 있는 URL 경로
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')  # 업로드 파일이 저장되는 경로
 

@@ -1,0 +1,20 @@
+   /* 네브바로부터 충분한 공간 확보 */
+        h2 {
+            margin-top: 100px; /* 네브바 아래로 80px 떨어지게 설정 */
+            text-align: center; /* 타이틀을 중앙 정렬 */
+            font-size: 24px; /* 타이틀 크기 설정 */
+        }
+
+        /* 차트 컨테이너를 중앙에 배치 */
+        .chart-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: calc(100vh - 120px); /* 차트를 화면 중앙에 배치하고 타이틀 높이를 제외 */
+        }
+
+        /* 캔버스의 크기를 줄여 중앙에 배치 */
+        canvas {
+            width: 400px;  /* 차트 너비를 400px로 설정 */
+            height: 400px; /* 차트 높이를 400px로 설정 */
+        }

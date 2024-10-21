@@ -3,7 +3,7 @@
        <a href="{% url 'main' %}" class="navbar-brand">KOGOANGE</a>
        <a href="{% url 'recommend:movie' %}">recommend movie</a>
        <a href="{% url 'chatbot:window' %}">chatbot</a>
-       <a href="{% url 'pca:pca_view' %}">visualization</a>
+       <a href="{% url 'chart:genre_chart' %}">visualization</a>
        <div class="navbar-links">
            {% if user.is_authenticated %}
                <div class="navbar-user-info">

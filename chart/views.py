@@ -6,38 +6,33 @@ from django.http import JsonResponse
 from django.shortcuts import render
 from sklearn.decomposition import PCA
 from sklearn.preprocessing import StandardScaler
+from recommend.dbCtrl import bring_dataframe_from_table
+from collections import Counter
 from sklearn.discriminant_analysis import LinearDiscriminantAnalysis as LDA
 
 
-def scatter_plot_view(request):
-    return render(request, 'pca/pca_scatter.html')
+def genre_distribution_view(request):
+    return render(request, 'chart/genre_distribution_view.html')
 
 
-def pca_view(request):
-    # Load the iris dataset
-    iris_data = sns.load_dataset('iris')
+def pop_chart_view(request):
+    pop_movies = bring_dataframe_from_table('popular_movies', "postgres")
+    movies = bring_dataframe_from_table("movies", "postgres")
+    # pop_movies에서 20개의 movie_id만 추출
+    pop_movies_ids = pop_movies.sort_values('mean').iloc[:20, 1].to_list()
+    filtered_movies = movies[movies['movie_id'].isin(pop_movies_ids)][['genre']]
 
-    # Extract features and labels
-    X = iris_data[["sepal_length", "sepal_width", "petal_length", "petal_width"]].values
-    y = iris_data["species"].values
+    # 각 영화의 장르 문자열을 '|' 기준으로 분리한 후 하나의 리스트로 만듦
+    all_genres = filtered_movies['genre'].apply(lambda x: x.split(',')).explode()
 
-    # Standardize the features
-    scaler = StandardScaler()
-    X_scaled = scaler.fit_transform(X)
+    # 유니크한 장르값을 리스트로 변환
+    all_genres = all_genres.tolist()
 
-    # Perform LDA to reduce dimensions to 2 components
-    lda = LDA(n_components=2)
-    X_lda = lda.fit_transform(X_scaled, y)  # LDA requires both X and y
+    # 주어진 리스트에서 각 장르의 앞뒤 공백을 제거한 후 개수를 셈
+    cleaned_genres = [genre.strip() for genre in all_genres]
+    genre_data = Counter(cleaned_genres)
 
-    # Create a DataFrame for the LDA result
-    lda_df = pd.DataFrame(data=X_lda, columns=['LD1', 'LD2'])
-    lda_df['species'] = y
-
-    # Convert DataFrame to JSON
-    lda_data = lda_df.to_dict(orient='records')
-
-    # Return LDA data as JSON
-    return JsonResponse(lda_data, safe=False)
+    return JsonResponse(genre_data)
 
 
 def histogram_data_view(request):

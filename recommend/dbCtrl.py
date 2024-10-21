@@ -1,4 +1,4 @@
-import mysql.connector as conn
+# import mysql.connector as conn
 import pandas as pd
 from sqlalchemy import create_engine
 from sqlalchemy.exc import SQLAlchemyError
@@ -14,10 +14,10 @@ def connect_field():
     return fields
 def postgres_connect_field():
     fields = {
-        "host": "localhost",
-        "username": "postgres",
+        "host": "52.79.160.194",
+        "username": "kogo1490",
         "password": "math1106",
-        "database": "postgres",
+        "database": "mydb",
         "port": 5432
     }
     return fields

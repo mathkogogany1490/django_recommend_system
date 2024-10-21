@@ -23,6 +23,7 @@ def answer_view(request):
                     result = cursor.fetchone()  # 가장 유사한 질문 하나만 가져옴
             print(result)
             bot_reply = f"{result[0]}"
+
         except Exception as error:
             bot_reply = "다시 입력해 주세요!!!"
         return JsonResponse({"reply": bot_reply})
