@@ -16,7 +16,7 @@ def movie_view(request):
 def load_movies(request):
     # popular_movies와 customers 데이터프레임 가져오기
     pop_movies = bring_dataframe_from_table('popular_movies', "postgres")
-    movies = bring_dataframe_from_table("movies", "postgres")
+    # movies = bring_dataframe_from_table("movies", "postgres")
     # pop_movies에서 20개의 movie_id만 추출
     pop_movies_ids = pop_movies.sort_values('mean').iloc[:20, 1].to_list()
 

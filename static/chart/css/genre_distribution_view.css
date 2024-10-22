@@ -1,20 +1,25 @@
-   /* 네브바로부터 충분한 공간 확보 */
-        h2 {
-            margin-top: 100px; /* 네브바 아래로 80px 떨어지게 설정 */
-            text-align: center; /* 타이틀을 중앙 정렬 */
-            font-size: 24px; /* 타이틀 크기 설정 */
-        }
+/* chart/static/chart/css/genre_distribution_view.css */
 
-        /* 차트 컨테이너를 중앙에 배치 */
-        .chart-container {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: calc(100vh - 120px); /* 차트를 화면 중앙에 배치하고 타이틀 높이를 제외 */
-        }
+/* 차트를 가로로 배치하는 스타일 */
+.chart-row {
+    display: flex;
+    justify-content: center;  /* 차트를 중앙에 정렬 */
+    flex-wrap: wrap;  /* 여러 줄을 사용할 수 있도록 함 */
+    margin-bottom: 20px;  /* 행 간 간격 추가 */
+}
 
-        /* 캔버스의 크기를 줄여 중앙에 배치 */
-        canvas {
-            width: 400px;  /* 차트 너비를 400px로 설정 */
-            height: 400px; /* 차트 높이를 400px로 설정 */
-        }
+.chart-container {
+    width: 30%;  /* 차트의 너비를 줄여서 3개가 한 줄에 나란히 배치되도록 설정 */
+    margin: 10px;  /* 차트 간 여백 추가 */
+}
+
+canvas {
+    max-width: 100%;  /* 캔버스 크기를 컨테이너에 맞춤 */
+    height: auto;
+}
+
+
+canvas {
+    max-width: 100%;  /* 캔버스 크기를 컨테이너에 맞춤 */
+    height: auto;
+}

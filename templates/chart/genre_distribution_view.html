@@ -7,93 +7,149 @@
     <title>Genre Distribution</title>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels"></script>
-     {% load static %}
+    {% load static %}
     <link rel="stylesheet" href="{% static 'main/css/navbar.css' %}">
     <link rel="stylesheet" href="{% static 'chart/css/genre_distribution_view.css' %}">
 </head>
 <body>
-     {% include 'navbar.html' %}
+    {% include 'navbar.html' %}
 
-    <h2>Genre Distribution (Async)</h2>
-      <div class="chart-container">
-        <canvas id="genreChart"></canvas>
+    <!-- 라벨은 상단에 한번만 표시 -->
+    <h2>Genre Distribution</h2>
+
+    <!-- 첫 번째 행: 두 개의 파이 차트 가로 배치 -->
+    <div class="chart-row">
+        <div class="chart-container">
+            <canvas id="genreChart"></canvas>
+            <div class="chart-label">Popular Genre Distribution</div> <!-- 차트 아래 이름 추가 -->
+        </div>
+        <div class="chart-container">
+            <canvas id="custGenreChart"></canvas>
+            <div class="chart-label">Customer Genre Distribution</div> <!-- 차트 아래 이름 추가 -->
+        </div>
     </div>
 
+    <!-- 두 번째 행: 세 개의 파이 차트 가로 배치 -->
+    <div class="chart-row">
+        <div class="chart-container">
+            <canvas id="svdGenreChart"></canvas>
+            <div class="chart-label">SVD Genre Distribution</div> <!-- 차트 아래 이름 추가 -->
+        </div>
+        <div class="chart-container">
+            <canvas id="nmfGenreChart"></canvas>
+            <div class="chart-label">NMF Genre Distribution</div> <!-- 차트 아래 이름 추가 -->
+        </div>
+        <div class="chart-container">
+            <canvas id="mfGenreChart"></canvas>
+            <div class="chart-label">Matrix Factorization Genre Distribution</div> <!-- 차트 아래 이름 추가 -->
+        </div>
+    </div>
 
     <script>
-         // 장르 데이터를 비동기로 가져오기 위한 함수
-        async function fetchGenreData() {
-            const response = await fetch('{% url "chart:pop_chart" %}');  // Django 서버의 해당 엔드포인트로 요청
-            const genreData = await response.json();
-            return genreData;
-        }
+    // 동일한 라벨 순서 정의
+    const labels = ['Action', 'Comedy', 'Drama', 'Horror', 'Romance'];
 
-        // 차트를 그리는 함수
-        function drawChart(genreData) {
-            const ctx = document.getElementById('genreChart').getContext('2d');
-            const genreChart = new Chart(ctx, {
-                type: 'pie',
-                data: {
-                    labels: Object.keys(genreData),  // 장르 이름
-                    datasets: [{
-                        label: 'Genre Distribution',
-                        data: Object.values(genreData),  // 장르별 개수
-                        backgroundColor: [
-                            'rgba(255, 99, 132, 0.2)',
-                            'rgba(54, 162, 235, 0.2)',
-                            'rgba(255, 206, 86, 0.2)',
-                            'rgba(75, 192, 192, 0.2)',
-                            'rgba(153, 102, 255, 0.2)',
-                            'rgba(255, 159, 64, 0.2)',
-                            'rgba(255, 99, 71, 0.2)',
-                            'rgba(46, 139, 87, 0.2)',
-                            'rgba(70, 130, 180, 0.2)',
-                            'rgba(238, 130, 238, 0.2)'
-                        ],
-                        borderColor: [
-                            'rgba(255, 99, 132, 1)',
-                            'rgba(54, 162, 235, 1)',
-                            'rgba(255, 206, 86, 1)',
-                            'rgba(75, 192, 192, 1)',
-                            'rgba(153, 102, 255, 1)',
-                            'rgba(255, 159, 64, 1)',
-                            'rgba(255, 99, 71, 1)',
-                            'rgba(46, 139, 87, 1)',
-                            'rgba(70, 130, 180, 1)',
-                            'rgba(238, 130, 238, 1)'
-                        ],
-                        borderWidth: 1
-                    }]
-                },
-                options: {
-                    responsive: true,
-                    plugins: {
-                        legend: {
-                            position: 'top',
+    // 비동기로 데이터를 가져오는 함수들
+    async function fetchGenreData() {
+        const response = await fetch('{% url "chart:pop_chart" %}');
+        return response.json();
+    }
+
+    async function fetchCustGenreData() {
+        const response = await fetch('{% url "chart:cust_chart" %}');
+        return response.json();
+    }
+
+    async function fetchSvdGenreData() {
+        const response = await fetch('{% url "chart:svd_chart" %}');
+        return response.json();
+    }
+
+    async function fetchNmfGenreData() {
+        const response = await fetch('{% url "chart:nmf_chart" %}');
+        return response.json();
+    }
+
+    async function fetchMfGenreData() {
+        const response = await fetch('{% url "chart:mf_chart" %}');
+        return response.json();
+    }
+
+    // 데이터를 라벨 순서에 맞게 정렬하는 함수
+    function alignDataWithLabels(data) {
+        const alignedData = labels.map(label => data[label] || 0); // 라벨이 없을 경우 0으로 채움
+        return alignedData;
+    }
+
+    // 차트를 그리는 함수 (라벨은 미리 정해진 labels를 사용)
+    function drawChart(chartId, genreData) {
+        const ctx = document.getElementById(chartId).getContext('2d');
+        const alignedData = alignDataWithLabels(genreData);  // 데이터 정렬
+
+        const genreChart = new Chart(ctx, {
+            type: 'pie',
+            data: {
+                labels: labels,  // 미리 정해진 라벨 순서
+                datasets: [{
+                    data: alignedData,  // 정렬된 데이터
+                    backgroundColor: [
+                        'rgba(255, 99, 132, 0.2)',
+                        'rgba(54, 162, 235, 0.2)',
+                        'rgba(255, 206, 86, 0.2)',
+                        'rgba(75, 192, 192, 0.2)',
+                        'rgba(153, 102, 255, 0.2)'
+                    ],
+                    borderColor: [
+                        'rgba(255, 99, 132, 1)',
+                        'rgba(54, 162, 235, 1)',
+                        'rgba(255, 206, 86, 1)',
+                        'rgba(75, 192, 192, 1)',
+                        'rgba(153, 102, 255, 1)'
+                    ],
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                responsive: true,
+                plugins: {
+                    legend: {
+                        display: false,  // 차트 내부 라벨 표시 제거
+                    },
+                    datalabels: {
+                        color: '#000',
+                        formatter: (value, context) => {
+                            return context.chart.data.labels[context.dataIndex];
                         },
-                        datalabels: {
-                            color: '#000',  // 데이터 레이블 색상
-                            formatter: (value, context) => {
-                                return context.chart.data.labels[context.dataIndex];  // 장르 이름 반환
-                            },
-                            font: {
-                                size: 14,  // 글자 크기 설정
-                                weight: 'bold',
-                            },
-                            textAlign: 'center'
-                        }
+                        font: {
+                            size: 14,
+                            weight: 'bold',
+                        },
+                        textAlign: 'center'
                     }
-                },
-                plugins: [ChartDataLabels]  // datalabels 플러그인 활성화
-            });
-        }
-
-        // 페이지 로딩 시 비동기로 데이터를 가져와서 차트를 그리기
-        document.addEventListener('DOMContentLoaded', async () => {
-            const genreData = await fetchGenreData();
-            drawChart(genreData);
+                }
+            },
+            plugins: [ChartDataLabels]
         });
-    </script>
+    }
+
+    // 페이지 로딩 시 각각의 차트를 그리기
+    document.addEventListener('DOMContentLoaded', async () => {
+        const genreData = await fetchGenreData();
+        drawChart('genreChart', genreData);
+
+        const custGenreData = await fetchCustGenreData();
+        drawChart('custGenreChart', custGenreData);
+
+        const svdGenreData = await fetchSvdGenreData();
+        drawChart('svdGenreChart', svdGenreData);
+
+        const nmfGenreData = await fetchNmfGenreData();
+        drawChart('nmfGenreChart', nmfGenreData);
+
+        const mfGenreData = await fetchMfGenreData();
+        drawChart('mfGenreChart', mfGenreData);
+    });
+</script>
+
 </body>
 </html>
-
