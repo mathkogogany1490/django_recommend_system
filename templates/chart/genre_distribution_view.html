@@ -1,10 +1,9 @@
-<!-- chart/templates/genre_distribution_view.html -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Genre Distribution</title>
+    <title>장르 분포 비교</title>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels"></script>
     {% load static %}
@@ -14,42 +13,43 @@
 <body>
     {% include 'navbar.html' %}
 
-    <!-- 라벨은 상단에 한번만 표시 -->
-    <h2>Genre Distribution</h2>
+    <!-- 타이틀 한글로 수정 -->
+    <h2>장르 분포 비교</h2>
 
-    <!-- 첫 번째 행: 두 개의 파이 차트 가로 배치 -->
+    <!-- 첫 번째 줄: Popular, Customer 차트 두 개 가로 배치 -->
     <div class="chart-row">
-        <div class="chart-container">
+        <div class="chart-item">
             <canvas id="genreChart"></canvas>
-            <div class="chart-label">Popular Genre Distribution</div> <!-- 차트 아래 이름 추가 -->
+            <div class="chart-label">인기 장르 분포</div>
         </div>
-        <div class="chart-container">
+        <div class="chart-item">
             <canvas id="custGenreChart"></canvas>
-            <div class="chart-label">Customer Genre Distribution</div> <!-- 차트 아래 이름 추가 -->
+            <div class="chart-label">고객 장르 분포</div>
         </div>
     </div>
 
-    <!-- 두 번째 행: 세 개의 파이 차트 가로 배치 -->
-    <div class="chart-row">
-        <div class="chart-container">
+    <!-- 예측 모델 타이틀 한글로 수정 -->
+    <h3 class="prediction-title">예측 모델</h3>
+
+    <!-- 두 번째 줄: SVD, NMF, MF 차트 세 개 가로 배치 -->
+    <div class="chart-row second-row">
+        <div class="chart-item">
             <canvas id="svdGenreChart"></canvas>
-            <div class="chart-label">SVD Genre Distribution</div> <!-- 차트 아래 이름 추가 -->
+            <div class="chart-label">SVD 장르 분포</div>
         </div>
-        <div class="chart-container">
+        <div class="chart-item">
             <canvas id="nmfGenreChart"></canvas>
-            <div class="chart-label">NMF Genre Distribution</div> <!-- 차트 아래 이름 추가 -->
+            <div class="chart-label">NMF 장르 분포</div>
         </div>
-        <div class="chart-container">
+        <div class="chart-item">
             <canvas id="mfGenreChart"></canvas>
-            <div class="chart-label">Matrix Factorization Genre Distribution</div> <!-- 차트 아래 이름 추가 -->
+            <div class="chart-label">행렬 분해 장르 분포</div>
         </div>
     </div>
 
     <script>
-    // 동일한 라벨 순서 정의
-    const labels = ['Action', 'Comedy', 'Drama', 'Horror', 'Romance'];
+    const labels = ['Action', 'Comedy', 'Drama', 'Horror', 'Romance', 'Sci-Fi', 'Thriller', 'Fantasy', 'Documentary', 'Adventure'];
 
-    // 비동기로 데이터를 가져오는 함수들
     async function fetchGenreData() {
         const response = await fetch('{% url "chart:pop_chart" %}');
         return response.json();
@@ -75,46 +75,59 @@
         return response.json();
     }
 
-    // 데이터를 라벨 순서에 맞게 정렬하는 함수
     function alignDataWithLabels(data) {
-        const alignedData = labels.map(label => data[label] || 0); // 라벨이 없을 경우 0으로 채움
+        const alignedData = labels.map(label => data[label] || 0);
         return alignedData;
     }
 
-    // 차트를 그리는 함수 (라벨은 미리 정해진 labels를 사용)
-    function drawChart(chartId, genreData) {
+    function drawChart(chartId, genreData, chartType = 'default') {
         const ctx = document.getElementById(chartId).getContext('2d');
-        const alignedData = alignDataWithLabels(genreData);  // 데이터 정렬
+        const alignedData = alignDataWithLabels(genreData);
+
+        let colors;
+        if (chartType === 'popular') {
+        colors = [
+                'rgba(255, 99, 132, 0.2)',
+                'rgba(54, 162, 235, 0.2)',
+                'rgba(255, 206, 86, 0.2)',
+                'rgba(75, 192, 192, 0.2)',
+                'rgba(153, 102, 255, 0.2)',
+                'rgba(100, 149, 237, 0.2)',
+                'rgba(255, 159, 64, 0.2)',
+                'rgba(144, 238, 144, 0.2)',
+                'rgba(210, 105, 30, 0.2)',
+                'rgba(70, 130, 180, 0.2)'
+            ];
+        } else {
+            colors = [
+                'rgba(255, 99, 132, 0.8)',
+                'rgba(54, 162, 235, 0.8)',
+                'rgba(75, 192, 192, 0.8)',
+                'rgba(255, 206, 86, 0.8)',
+                'rgba(153, 102, 255, 0.8)',
+                'rgba(100, 149, 237, 0.8)',
+                'rgba(255, 159, 64, 0.8)',
+                'rgba(144, 238, 144, 0.8)',
+                'rgba(210, 105, 30, 0.8)',
+                'rgba(70, 130, 180, 0.8)'
+            ];
+        }
 
         const genreChart = new Chart(ctx, {
             type: 'pie',
             data: {
-                labels: labels,  // 미리 정해진 라벨 순서
+                labels: labels,
                 datasets: [{
-                    data: alignedData,  // 정렬된 데이터
-                    backgroundColor: [
-                        'rgba(255, 99, 132, 0.2)',
-                        'rgba(54, 162, 235, 0.2)',
-                        'rgba(255, 206, 86, 0.2)',
-                        'rgba(75, 192, 192, 0.2)',
-                        'rgba(153, 102, 255, 0.2)'
-                    ],
-                    borderColor: [
-                        'rgba(255, 99, 132, 1)',
-                        'rgba(54, 162, 235, 1)',
-                        'rgba(255, 206, 86, 1)',
-                        'rgba(75, 192, 192, 1)',
-                        'rgba(153, 102, 255, 1)'
-                    ],
+                    data: alignedData,
+                    backgroundColor: colors,
+                    borderColor: colors.map(color => color.replace('0.2', '1').replace('0.8', '1')),
                     borderWidth: 1
                 }]
             },
             options: {
                 responsive: true,
                 plugins: {
-                    legend: {
-                        display: false,  // 차트 내부 라벨 표시 제거
-                    },
+                    legend: { display: false },
                     datalabels: {
                         color: '#000',
                         formatter: (value, context) => {
@@ -122,7 +135,7 @@
                         },
                         font: {
                             size: 14,
-                            weight: 'bold',
+                            weight: 'bold' /* 글자 두께를 굵게 설정 */
                         },
                         textAlign: 'center'
                     }
@@ -132,22 +145,21 @@
         });
     }
 
-    // 페이지 로딩 시 각각의 차트를 그리기
     document.addEventListener('DOMContentLoaded', async () => {
         const genreData = await fetchGenreData();
-        drawChart('genreChart', genreData);
+        drawChart('genreChart', genreData, 'popular');
 
         const custGenreData = await fetchCustGenreData();
         drawChart('custGenreChart', custGenreData);
 
         const svdGenreData = await fetchSvdGenreData();
-        drawChart('svdGenreChart', svdGenreData);
+        drawChart('svdGenreChart', svdGenreData, 'svd');
 
         const nmfGenreData = await fetchNmfGenreData();
-        drawChart('nmfGenreChart', nmfGenreData);
+        drawChart('nmfGenreChart', nmfGenreData, 'nmf');
 
         const mfGenreData = await fetchMfGenreData();
-        drawChart('mfGenreChart', mfGenreData);
+        drawChart('mfGenreChart', mfGenreData, 'mf');
     });
 </script>
 

@@ -90,10 +90,10 @@ WSGI_APPLICATION = 'config.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'postgres',       # 생성한 데이터베이스 이름
-        'USER': 'postgres',          # 생성한 사용자 이름
+        'NAME': 'mydb',       # 생성한 데이터베이스 이름
+        'USER': 'kogo1490',          # 생성한 사용자 이름
         'PASSWORD': 'math1106',  # 생성한 비밀번호
-        'HOST': 'localhost',       # 데이터베이스가 로컬에 있을 경우
+        'HOST': '52.79.160.194',       # 데이터베이스가 로컬에 있을 경우
         'PORT': '5432',            # 기본 PostgreSQL 포트
     }
 }
@@ -138,7 +138,7 @@ STATIC_URL = 'static/'
 STATICFILES_DIRS = [
     os.path.join(BASE_DIR, "static")
 ]
-# STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles') # collectstati 시 사용하는 경로
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles') # collectstati 시 사용하는 경로
 
 MEDIA_URL = '/media/'  # 업로드 파일에 접근할 수 있는 URL 경로
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')  # 업로드 파일이 저장되는 경로

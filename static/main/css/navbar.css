@@ -4,7 +4,7 @@
    position: fixed; /* Fixed at the top of the page */
    top: 0;
    width: 100%;
-   background-color: #C0C0C0; /* Silver background color */
+   background-color:  #3498db;
    color: #F8F8F8; /* Light silver/grayish text color */
    padding: 10px 20px; /* Padding around the content */
    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); /* Subtle shadow for depth */

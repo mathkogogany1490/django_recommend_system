@@ -1,25 +1,67 @@
 /* chart/static/chart/css/genre_distribution_view.css */
 
-/* 차트를 가로로 배치하는 스타일 */
+/* 전체 페이지의 배경색을 분석적인 느낌의 블루 그레이 계열로 설정 */
+body {
+    background-color: #f0f4f8; /* 연한 블루 그레이 배경 */
+}
+
+/* 타이틀에 여백 및 글자 두께 추가 */
+h2 {
+    margin-top: 75px; /* navbar 아래로 타이틀을 내리기 위해 상단 여백 추가 */
+    text-align: center; /* 타이틀을 중앙 정렬 */
+    font-weight: bold; /* 글자 두께를 굵게 설정 */
+}
+
+/* 예측 모델 타이틀에 스타일 추가 */
+.prediction-title {
+    margin-top: 30px; /* 두 번째 줄 위에 타이틀을 추가하기 위한 여백 */
+    margin-bottom: 20px; /* 예측 모델 타이틀 아래 여백 */
+    text-align: center; /* 타이틀을 중앙 정렬 */
+    font-size: 24px; /* 타이틀 크기 */
+    font-weight: bold; /* 타이틀을 굵게 설정 */
+}
+
+/* 차트를 가로로 중앙에 배치하는 스타일 */
 .chart-row {
     display: flex;
-    justify-content: center;  /* 차트를 중앙에 정렬 */
-    flex-wrap: wrap;  /* 여러 줄을 사용할 수 있도록 함 */
-    margin-bottom: 20px;  /* 행 간 간격 추가 */
+    justify-content: center;  /* 차트들을 가로로 중앙에 정렬 */
+    flex-wrap: wrap;  /* 가로로 정렬되다가 화면이 작아지면 줄 바꿈 */
+    margin-bottom: 20px;  /* 행 간 간격 */
+    gap: 50px;  /* 차트 간 여백을 50px로 설정 */
 }
 
-.chart-container {
-    width: 30%;  /* 차트의 너비를 줄여서 3개가 한 줄에 나란히 배치되도록 설정 */
-    margin: 10px;  /* 차트 간 여백 추가 */
+.chart-item {
+    flex: 0 1 350px; /* 차트의 고정 너비 */
+    text-align: center; /* 차트 라벨을 중앙 정렬 */
+    margin-bottom: 30px; /* 차트와 바닥 사이에 추가적인 여백을 주기 위해 아래쪽 마진 추가 */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* 그림자 추가로 약간 떠있는 느낌 */
+    border-radius: 10px; /* 부드러운 모서리 추가 */
+    padding: 10px;
+    background-color: white; /* 차트 주변을 흰색으로 설정하여 그림자가 잘 보이도록 함 */
+    transition: transform 0.3s ease, box-shadow 0.3s ease; /* hover 시 이동 및 그림자 애니메이션 */
 }
 
+/* 차트 hover 시 이동 효과 */
+.chart-item:hover {
+    transform: translateY(-10px); /* 차트를 위로 10px 이동 */
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2); /* hover 시 그림자를 더 진하게 */
+}
+
+/* 차트 라벨의 글자를 진하게 하고 색상 추가 */
+.chart-label {
+    font-weight: bold; /* 글자 두께를 굵게 설정 */
+    font-size: 18px; /* 글자 크기 조정 */
+    color: #2c3e50; /* 라벨 색상을 짙은 남색으로 설정 (원하는 색상으로 변경 가능) */
+    margin-top: 10px; /* 차트와 라벨 간의 여백 추가 */
+}
+
+/* 캔버스 설정 */
 canvas {
     max-width: 100%;  /* 캔버스 크기를 컨테이너에 맞춤 */
-    height: auto;
+    height: 250px;  /* 차트의 높이 */
 }
 
-
-canvas {
-    max-width: 100%;  /* 캔버스 크기를 컨테이너에 맞춤 */
-    height: auto;
+.second-row {
+    justify-content: center;  /* 세 개의 차트가 가로로 배치되도록 설정 */
+    gap: 50px;  /* 차트 간 여백 추가 */
 }
