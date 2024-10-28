@@ -9,159 +9,146 @@
     {% load static %}
     <link rel="stylesheet" href="{% static 'main/css/navbar.css' %}">
     <link rel="stylesheet" href="{% static 'chart/css/genre_distribution_view.css' %}">
+
+    <style>
+        /* 데이터 없음 메시지 스타일 */
+        .no-data-message {
+            display: none;
+            text-align: center;
+            color: #666;
+            font-size: 1.2em;
+            font-weight: bold;
+            margin-top: 20px;
+        }
+    </style>
 </head>
 <body>
     {% include 'navbar.html' %}
 
-    <!-- 타이틀 한글로 수정 -->
     <h2>장르 분포 비교</h2>
 
     <!-- 첫 번째 줄: Popular, Customer 차트 두 개 가로 배치 -->
     <div class="chart-row">
-        <div class="chart-item">
-            <canvas id="genreChart"></canvas>
+        <div class="chart-item chart-container">
             <div class="chart-label">인기 장르 분포</div>
+            <canvas id="genreChart"></canvas>
+            <div id="genreChartMessage" class="no-data-message">데이터가 없습니다.</div>
         </div>
-        <div class="chart-item">
-            <canvas id="custGenreChart"></canvas>
+        <div class="chart-item chart-container">
             <div class="chart-label">고객 장르 분포</div>
+            <canvas id="custGenreChart"></canvas>
+            <div id="custChartMessage" class="no-data-message">데이터가 없습니다.</div>
         </div>
     </div>
 
-    <!-- 예측 모델 타이틀 한글로 수정 -->
     <h3 class="prediction-title">예측 모델</h3>
 
-    <!-- 두 번째 줄: SVD, NMF, MF 차트 세 개 가로 배치 -->
+    <!-- 두 번째 줄: SVD, NMF, MF, LDA 차트 네 개 가로 배치 -->
     <div class="chart-row second-row">
-        <div class="chart-item">
-            <canvas id="svdGenreChart"></canvas>
+        <div class="chart-item chart-container">
             <div class="chart-label">SVD 장르 분포</div>
+            <canvas id="svdGenreChart"></canvas>
+            <div id="svdChartMessage" class="no-data-message">데이터가 없습니다.</div>
         </div>
-        <div class="chart-item">
-            <canvas id="nmfGenreChart"></canvas>
+        <div class="chart-item chart-container">
             <div class="chart-label">NMF 장르 분포</div>
+            <canvas id="nmfGenreChart"></canvas>
+            <div id="nmfChartMessage" class="no-data-message">데이터가 없습니다.</div>
         </div>
-        <div class="chart-item">
-            <canvas id="mfGenreChart"></canvas>
+        <div class="chart-item chart-container">
             <div class="chart-label">행렬 분해 장르 분포</div>
+            <canvas id="mfGenreChart"></canvas>
+            <div id="mfChartMessage" class="no-data-message">데이터가 없습니다.</div>
+        </div>
+        <div class="chart-item chart-container">
+            <div class="chart-label">유사 리뷰 추천 장르 분포</div>
+            <canvas id="ldaGenreChart"></canvas>
+            <div id="ldaChartMessage" class="no-data-message">데이터가 없습니다.</div>
         </div>
     </div>
 
+    <!-- Django에서 JavaScript로 URL 전달 -->
     <script>
-    const labels = ['Action', 'Comedy', 'Drama', 'Horror', 'Romance', 'Sci-Fi', 'Thriller', 'Fantasy', 'Documentary', 'Adventure'];
+        const popChartUrl = "{% url 'chart:pop_chart' %}";
+        const custChartUrl = "{% url 'chart:cust_chart' %}";
+        const svdChartUrl = "{% url 'chart:svd_chart' %}";
+        const nmfChartUrl = "{% url 'chart:nmf_chart' %}";
+        const mfChartUrl = "{% url 'chart:mf_chart' %}";
+        const ldaChartUrl = "{% url 'chart:lda_review_chart' %}";
 
-    async function fetchGenreData() {
-        const response = await fetch('{% url "chart:pop_chart" %}');
-        return response.json();
-    }
+        const labels = ['Action', 'Comedy', 'Drama', 'Horror', 'Romance', 'Sci-Fi', 'Thriller', 'Fantasy', 'Documentary', 'Adventure'];
 
-    async function fetchCustGenreData() {
-        const response = await fetch('{% url "chart:cust_chart" %}');
-        return response.json();
-    }
-
-    async function fetchSvdGenreData() {
-        const response = await fetch('{% url "chart:svd_chart" %}');
-        return response.json();
-    }
-
-    async function fetchNmfGenreData() {
-        const response = await fetch('{% url "chart:nmf_chart" %}');
-        return response.json();
-    }
-
-    async function fetchMfGenreData() {
-        const response = await fetch('{% url "chart:mf_chart" %}');
-        return response.json();
-    }
-
-    function alignDataWithLabels(data) {
-        const alignedData = labels.map(label => data[label] || 0);
-        return alignedData;
-    }
-
-    function drawChart(chartId, genreData, chartType = 'default') {
-        const ctx = document.getElementById(chartId).getContext('2d');
-        const alignedData = alignDataWithLabels(genreData);
-
-        let colors;
-        if (chartType === 'popular') {
-        colors = [
-                'rgba(255, 99, 132, 0.2)',
-                'rgba(54, 162, 235, 0.2)',
-                'rgba(255, 206, 86, 0.2)',
-                'rgba(75, 192, 192, 0.2)',
-                'rgba(153, 102, 255, 0.2)',
-                'rgba(100, 149, 237, 0.2)',
-                'rgba(255, 159, 64, 0.2)',
-                'rgba(144, 238, 144, 0.2)',
-                'rgba(210, 105, 30, 0.2)',
-                'rgba(70, 130, 180, 0.2)'
-            ];
-        } else {
-            colors = [
-                'rgba(255, 99, 132, 0.8)',
-                'rgba(54, 162, 235, 0.8)',
-                'rgba(75, 192, 192, 0.8)',
-                'rgba(255, 206, 86, 0.8)',
-                'rgba(153, 102, 255, 0.8)',
-                'rgba(100, 149, 237, 0.8)',
-                'rgba(255, 159, 64, 0.8)',
-                'rgba(144, 238, 144, 0.8)',
-                'rgba(210, 105, 30, 0.8)',
-                'rgba(70, 130, 180, 0.8)'
-            ];
+        async function fetchChartData(url) {
+            const response = await fetch(url);
+            return response.json();
         }
 
-        const genreChart = new Chart(ctx, {
-            type: 'pie',
-            data: {
-                labels: labels,
-                datasets: [{
-                    data: alignedData,
-                    backgroundColor: colors,
-                    borderColor: colors.map(color => color.replace('0.2', '1').replace('0.8', '1')),
-                    borderWidth: 1
-                }]
-            },
-            options: {
-                responsive: true,
-                plugins: {
-                    legend: { display: false },
-                    datalabels: {
-                        color: '#000',
-                        formatter: (value, context) => {
-                            return context.chart.data.labels[context.dataIndex];
-                        },
-                        font: {
-                            size: 14,
-                            weight: 'bold' /* 글자 두께를 굵게 설정 */
-                        },
-                        textAlign: 'center'
+        function alignDataWithLabels(data) {
+            return labels.map(label => data[label] || 0);
+        }
+
+        function drawChart(chartId, genreData, chartType = 'default') {
+            const ctx = document.getElementById(chartId).getContext('2d');
+            const alignedData = alignDataWithLabels(genreData);
+
+            const colors = chartType === 'popular' ?
+                ['rgba(255, 99, 132, 0.2)', 'rgba(54, 162, 235, 0.2)', 'rgba(255, 206, 86, 0.2)',
+                 'rgba(75, 192, 192, 0.2)', 'rgba(153, 102, 255, 0.2)', 'rgba(100, 149, 237, 0.2)',
+                 'rgba(255, 159, 64, 0.2)', 'rgba(144, 238, 144, 0.2)', 'rgba(210, 105, 30, 0.2)',
+                 'rgba(70, 130, 180, 0.2)']
+                :
+                ['rgba(255, 99, 132, 0.8)', 'rgba(54, 162, 235, 0.8)', 'rgba(75, 192, 192, 0.8)',
+                 'rgba(255, 206, 86, 0.8)', 'rgba(153, 102, 255, 0.8)', 'rgba(100, 149, 237, 0.8)',
+                 'rgba(255, 159, 64, 0.8)', 'rgba(144, 238, 144, 0.8)', 'rgba(210, 105, 30, 0.8)',
+                 'rgba(70, 130, 180, 0.8)'];
+
+            new Chart(ctx, {
+                type: 'pie',
+                data: {
+                    labels: labels,
+                    datasets: [{
+                        data: alignedData,
+                        backgroundColor: colors,
+                        borderColor: colors.map(color => color.replace('0.2', '1').replace('0.8', '1')),
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    plugins: {
+                        legend: { display: false },
+                        datalabels: {
+                            color: '#000',
+                            formatter: (value, context) => context.chart.data.labels[context.dataIndex],
+                            font: { size: 14, weight: 'bold' },
+                            textAlign: 'center'
+                        }
                     }
-                }
-            },
-            plugins: [ChartDataLabels]
+                },
+                plugins: [ChartDataLabels]
+            });
+        }
+
+        async function loadChartData(chartId, chartUrl, messageId, chartType) {
+            const data = await fetchChartData(chartUrl);
+
+            if (!data || data.error || Object.keys(data).length === 0) {
+                document.getElementById(chartId).style.display = 'none';
+                document.getElementById(messageId).style.display = 'block';
+            } else {
+                drawChart(chartId, data, chartType);
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', async () => {
+            await loadChartData('genreChart', popChartUrl, 'genreChartMessage', 'popular');
+            await loadChartData('custGenreChart', custChartUrl, 'custChartMessage');
+            await loadChartData('svdGenreChart', svdChartUrl, 'svdChartMessage', 'svd');
+            await loadChartData('nmfGenreChart', nmfChartUrl, 'nmfChartMessage', 'nmf');
+            await loadChartData('mfGenreChart', mfChartUrl, 'mfChartMessage', 'mf');
+            await loadChartData('ldaGenreChart', ldaChartUrl, 'ldaChartMessage', 'lda');
         });
-    }
-
-    document.addEventListener('DOMContentLoaded', async () => {
-        const genreData = await fetchGenreData();
-        drawChart('genreChart', genreData, 'popular');
-
-        const custGenreData = await fetchCustGenreData();
-        drawChart('custGenreChart', custGenreData);
-
-        const svdGenreData = await fetchSvdGenreData();
-        drawChart('svdGenreChart', svdGenreData, 'svd');
-
-        const nmfGenreData = await fetchNmfGenreData();
-        drawChart('nmfGenreChart', nmfGenreData, 'nmf');
-
-        const mfGenreData = await fetchMfGenreData();
-        drawChart('mfGenreChart', mfGenreData, 'mf');
-    });
-</script>
-
+    </script>
 </body>
 </html>
+

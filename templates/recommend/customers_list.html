@@ -5,7 +5,7 @@
         {% if customer.movie_image %}
             <img src="{{ customer.movie_image.url }}" alt="{{ customer.title }}">
         {% else %}
-            <img src="/static/images/default_profile.png" alt="{{ customer.title }} thumbnail">
+            <img src="/static/account/images/default_profile.png" alt="{{ customer.title }} thumbnail">
         {% endif %}
     </div>
 {% endfor %}

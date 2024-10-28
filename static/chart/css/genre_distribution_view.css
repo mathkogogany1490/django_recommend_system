@@ -47,13 +47,7 @@ h2 {
     box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2); /* hover 시 그림자를 더 진하게 */
 }
 
-/* 차트 라벨의 글자를 진하게 하고 색상 추가 */
-.chart-label {
-    font-weight: bold; /* 글자 두께를 굵게 설정 */
-    font-size: 18px; /* 글자 크기 조정 */
-    color: #2c3e50; /* 라벨 색상을 짙은 남색으로 설정 (원하는 색상으로 변경 가능) */
-    margin-top: 10px; /* 차트와 라벨 간의 여백 추가 */
-}
+
 
 /* 캔버스 설정 */
 canvas {
@@ -64,4 +58,37 @@ canvas {
 .second-row {
     justify-content: center;  /* 세 개의 차트가 가로로 배치되도록 설정 */
     gap: 50px;  /* 차트 간 여백 추가 */
+}
+/* 차트 컨테이너 스타일 */
+.chart-container {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+
+/* 차트 라벨의 글자를 진하게 하고 색상 추가 */
+.chart-label {
+    font-weight: bold; /* 글자 두께를 굵게 설정 */
+    font-size: 18px; /* 글자 크기 조정 */
+    color: #2c3e50; /* 라벨 색상을 짙은 남색으로 설정 (원하는 색상으로 변경 가능) */
+    margin-top: 10px; /* 차트와 라벨 간의 여백 추가 */
+}
+
+/* 데이터 없음 메시지 중앙 배치 스타일 */
+.no-data-message {
+    display: none;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    color: #666;
+    font-size: 1.2em;
+    font-weight: bold;
+    text-align: center;
+    line-height: 1.5;
 }

@@ -22,8 +22,12 @@ AUTH_USER_MODEL = 'account.User'
 SESSION_EXPIRE_AT_BROWSER_CLOSE = True
 
 # 세션 만료 시간 (초 단위, 30분 설정)
-#SESSION_COOKIE_AGE = 1800  # 30 * 60 초 = 30분
-
+# SESSION_SAVE_EVERY_REQUEST = True
+# SESSION_COOKIE_AGE = 1800  # 30 * 60 초 = 30분
+# SECURE_HSTS_SECONDS = 3600
+# SECURE_SSL_REDIRECT = True
+# SESSION_COOKIE_SECURE = True
+# CSRF_COOKIE_SECURE = True
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/4.2/howto/deployment/checklist/
 
@@ -90,10 +94,10 @@ WSGI_APPLICATION = 'config.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'mydb',       # 생성한 데이터베이스 이름
-        'USER': 'kogo1490',          # 생성한 사용자 이름
+        'NAME': 'postgres',       # 생성한 데이터베이스 이름
+        'USER': 'postgres',          # 생성한 사용자 이름
         'PASSWORD': 'math1106',  # 생성한 비밀번호
-        'HOST': '52.79.160.194',       # 데이터베이스가 로컬에 있을 경우
+        'HOST': 'localhost',       # 데이터베이스가 로컬에 있을 경우
         'PORT': '5432',            # 기본 PostgreSQL 포트
     }
 }
@@ -134,11 +138,11 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/4.2/howto/static-files/
 
 # css, javascript, img
-STATIC_URL = 'static/'
+STATIC_URL = '/static/'
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 STATICFILES_DIRS = [
-    os.path.join(BASE_DIR, "static")
+    os.path.join(BASE_DIR, 'static'),
 ]
-STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles') # collectstati 시 사용하는 경로
 
 MEDIA_URL = '/media/'  # 업로드 파일에 접근할 수 있는 URL 경로
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')  # 업로드 파일이 저장되는 경로

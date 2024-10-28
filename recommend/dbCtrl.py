@@ -14,10 +14,10 @@ def connect_field():
     return fields
 def postgres_connect_field():
     fields = {
-        "host": "52.79.160.194",
-        "username": "kogo1490",
+        "host": "localhost",
+        "username": "postgres",
         "password": "math1106",
-        "database": "mydb",
+        "database": "postgres",
         "port": 5432
     }
     return fields

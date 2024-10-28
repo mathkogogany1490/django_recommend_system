@@ -9,4 +9,5 @@ urlpatterns = [
     path('svd_genre_chart/', views.svd_chart_view, name='svd_chart'),
     path('nmf_genre_chart/', views.nmf_chart_view, name='nmf_chart'),
     path('mf_genre_chart/', views.mf_chart_view, name='mf_chart'),
+    path('lda_genre_chart/', views.lda_chart_view, name='lda_review_chart'),
 ]
